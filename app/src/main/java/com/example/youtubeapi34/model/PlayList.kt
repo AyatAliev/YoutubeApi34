@@ -71,5 +71,6 @@ data class ContentDetails(
     var caption: String,
     var licensedContent: Boolean,
     var contentRating: ContentRating,
-    var projection: String
+    var projection: String,
+    var itemCount: Int,
 )

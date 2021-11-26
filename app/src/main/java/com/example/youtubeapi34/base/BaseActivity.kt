@@ -16,11 +16,11 @@ abstract class BaseActivity<VB: ViewBinding>: AppCompatActivity() {
         checkInternet()
         setUI()
         setupLiveData()
-        clickListener()
+        setupClickListener()
 
     }
 
-    abstract fun clickListener() // внутри этого метода обрабатываем все клики
+    abstract fun setupClickListener() // внутри этого метода обрабатываем все клики
 
     abstract fun setUI() // инициализация UI
 

@@ -1,17 +1,24 @@
 package com.example.youtubeapi34.ui
 
+import android.annotation.SuppressLint
+import android.widget.Toast
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.youtubeapi34.base.BaseActivity
 import com.example.youtubeapi34.databinding.ActivityMainBinding
-import com.example.youtubeapi34.model.Items
+import com.example.youtubeapi34.model.PlayList
+import org.koin.androidx.viewmodel.ext.android.viewModel
 
-class PlayListActivity : BaseActivity<ActivityMainBinding>(),OnClickItem {
+@SuppressLint("NotifyDataSetChanged")
+class PlayListActivity : BaseActivity<ActivityMainBinding>() {
 
-    private lateinit var viewModel: PlayListViewModel
-    private lateinit var adapter: PlayListAdapter
+    private val viewModel: PlayListViewModel by viewModel()
+
+    private lateinit var playList: PlayList
+    private val adapter: PlayListAdapter by lazy { PlayListAdapter(playList,this::clickListener) }
 
     override fun setUI() {
+
     }
 
     private fun initRecyclerView() {
@@ -20,19 +27,19 @@ class PlayListActivity : BaseActivity<ActivityMainBinding>(),OnClickItem {
             layoutManager = LinearLayoutManager(this@PlayListActivity,LinearLayoutManager.VERTICAL,false)
             adapter = this@PlayListActivity.adapter
         }
+
+        adapter.notifyDataSetChanged()
     }
 
     override fun setupLiveData() {
-        viewModel = ViewModelProvider(this)[PlayListViewModel::class.java]
-
-
         viewModel.getPlayList().observe(this) {
-            adapter = PlayListAdapter(it,this)
+            playList = it
             initRecyclerView()
         }
     }
 
-    override fun clickListener() {
+    private fun clickListener(id: String) {
+        Toast.makeText(this,id,Toast.LENGTH_SHORT).show()
     }
 
     override fun checkInternet() {
@@ -42,12 +49,7 @@ class PlayListActivity : BaseActivity<ActivityMainBinding>(),OnClickItem {
         return ActivityMainBinding.inflate(layoutInflater)
     }
 
-    override fun onPlayListItemClick(id: String) {
+    override fun setupClickListener() {
 
     }
-
-/*    1. Создать свой ApiKey и ознакомиться с документацией
-    2. Добавить в класс playlist поле "items", отрисовать первых 2 экрана из фигмы (Проверка на интернет, и список всех PlayList)
-    3. Cделать переход на новую активити и передаете туда id и её отображаете тостом*/
-
 }
